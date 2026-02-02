@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Clarity Scorecard - Profit Clarity Group</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .intro h2 {
+            color: #1e3a8a;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .intro p {
+            color: #64748b;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .question-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            color: #1e293b;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .option.selected {
+            border-color: #3b82f6;
+            background: #dbeafe;
+            font-weight: 600;
+        }
+
+        .option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            color: #334155;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .calculate-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .results {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .score-display {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-number {
+            font-size: 72px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-label {
+            font-size: 18px;
+            color: #64748b;
+            margin-top: 10px;
+        }
+
+        .score-interpretation {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .score-interpretation h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .score-interpretation p {
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .level-critical {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .level-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .level-fair {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .level-good {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .recommendations {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .recommendations h3 {
+            color: #1e3a8a;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .recommendations ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .recommendations li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #334155;
+        }
+
+        .recommendations li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .cta-box h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .cta-box p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #1e3a8a;
+            padding: 15px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 26px;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .score-number {
+                font-size: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Financial Clarity Scorecard</h1>
+            <p>Discover Your Business Financial Health in 5 Questions</p>
+        </div>
+
+        <div class="content">
+            <div class="intro">
+                <h2>How Financially Healthy Is Your Contracting Business?</h2>
+                <p>Answer these 5 quick questions to get your Financial Clarity Score and personalized recommendations to improve your profitability.</p>
+            </div>
+
+            <form id="scorecard-form">
+                <!-- Question 1 -->
+                <div class="question-card">
+                    <div class="question-number">1</div>
+                    <div class="question-text">How predictable is your cash flow?</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q1" id="q1a" value="0" required>
+                            <label for="q1a">I'm constantly surprised by cash shortages and scrambling to cover payroll</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q1" id="q1b" value="1">
+                            <label for="q1b">I can usually predict 1-2 weeks ahead but often get caught off guard</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q1" id="q1c" value="2">
+                            <label for="q1c">I have a basic forecast and can predict the next 4-6 weeks with some accuracy</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q1" id="q1d" value="3">
+                            <label for="q1d">I have a detailed 13-week forecast and rarely get surprised by cash needs</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question-card">
+                    <div class="question-number">2</div>
+                    <div class="question-text">How confident are you that your pricing generates real profit?</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q2" id="q2a" value="0" required>
+                            <label for="q2a">I'm not sure—I price based on competitors or gut feeling</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q2" id="q2b" value="1">
+                            <label for="q2b">I use some markup formulas but haven't calculated my true costs</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q2" id="q2c" value="2">
+                            <label for="q2c">I know my costs and use markup, but haven't validated if I'm hitting profit targets</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q2" id="q2d" value="3">
+                            <label for="q2d">I have cost-plus pricing with proven profit margins on every job type</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question-card">
+                    <div class="question-number">3</div>
+                    <div class="question-text">Do you track job profitability in real-time?</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q3" id="q3a" value="0" required>
+                            <label for="q3a">No, I don't track costs per job—I just look at overall revenue</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q3" id="q3b" value="1">
+                            <label for="q3b">I track some job costs after completion, but it's inconsistent</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q3" id="q3c" value="2">
+                            <label for="q3c">I review job costs weekly but don't always catch problems in time</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q3" id="q3d" value="3">
+                            <label for="q3d">I track every job in real-time and can spot cost overruns immediately</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question-card">
+                    <div class="question-number">4</div>
+                    <div class="question-text">What's your average collection time for invoices?</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q4" id="q4a" value="0" required>
+                            <label for="q4a">60+ days—I'm constantly chasing payments</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q4" id="q4b" value="1">
+                            <label for="q4b">30-60 days—some customers pay on time, many don't</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q4" id="q4c" value="2">
+                            <label for="q4c">15-30 days—most customers pay reasonably quickly</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q4" id="q4d" value="3">
+                            <label for="q4d">Under 15 days—I collect payment at completion or have fast-paying commercial clients</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question-card">
+                    <div class="question-number">5</div>
+                    <div class="question-text">How often do you review your financial reports?</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q5" id="q5a" value="0" required>
+                            <label for="q5a">Rarely or never—I only check when things feel tight</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q5" id="q5b" value="1">
+                            <label for="q5b">Quarterly or when filing taxes</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q5" id="q5c" value="2">
+                            <label for="q5c">Monthly—I review P&L and balance sheet</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q5" id="q5d" value="3">
+                            <label for="q5d">Weekly or daily—I monitor KPIs and make data-driven decisions</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="calculate-btn">Calculate My Financial Clarity Score</button>
+            </form>
+
+            <div class="results" id="results">
+                <div class="score-display">
+                    <div class="score-number" id="score-number">0</div>
+                    <div class="score-label">out of 15 possible points</div>
+                </div>
+
+                <div class="score-interpretation" id="score-interpretation">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+
+                <div class="recommendations" id="recommendations">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+
+                <div class="cta-box">
+                    <h3>Ready to Improve Your Financial Clarity?</h3>
+                    <p>Let's work together to transform your business finances from reactive to proactive. Book a free Financial Diagnostic call to discover exactly where the money is leaking and how to fix it.</p>
+                    <a href="mailto:tracy@profitclaritygroup.com" class="cta-button">Schedule Your Free Call</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 Profit Clarity Group | Financial Coaching for Trades Contractors</p>
+        </div>
+    </div>
+
+    <script>
+        // Add click handlers to option divs
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+                
+                // Remove selected class from siblings
+                this.parentElement.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Add selected class to this option
+                this.classList.add('selected');
+            });
+        });
+
+        // Form submission
+        document.getElementById('scorecard-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate all questions answered
+            let allAnswered = true;
+            for (let i = 1; i <= 5; i++) {
+                const answer = document.querySelector(`input[name="q${i}"]:checked`);
+                if (!answer) {
+                    allAnswered = false;
+                    alert('Please answer all 5 questions before calculating your score.');
+                    return;
+                }
+            }
+            
+            // Calculate score
+            let totalScore = 0;
+            for (let i = 1; i <= 5; i++) {
+                const answer = document.querySelector(`input[name="q${i}"]:checked`);
+                if (answer) {
+                    totalScore += parseInt(answer.value);
+                }
+            }
+
+            console.log('Total Score:', totalScore); // Debug log
+
+            // Display score
+            document.getElementById('score-number').textContent = totalScore;
+
+            // Determine level and recommendations
+            let level, levelClass, interpretation, recommendations;
+
+            if (totalScore <= 3) {
+                level = "Critical - Immediate Action Needed";
+                levelClass = "level-critical";
+                interpretation = "Your business is operating in financial crisis mode. Without predictable cash flow and clear profit margins, you're at serious risk of business failure. The good news? These problems are fixable with the right systems.";
+                recommendations = [
+                    "Start tracking cash flow weekly—know exactly what's coming in and going out",
+                    "Calculate your true labor costs including burden, overhead, and profit margin",
+                    "Implement job costing immediately so you know which jobs make money",
+                    "Set up a collections system to get paid faster",
+                    "Get professional help—trying to fix this alone is like flying blind"
+                ];
+            } else if (totalScore <= 7) {
+                level = "Warning - Profit Leaks Everywhere";
+                levelClass = "level-warning";
+                interpretation = "Your business is staying afloat but leaving money on the table every single week. You're working hard but not seeing the profits you deserve. Small improvements in systems will create major financial wins.";
+                recommendations = [
+                    "Build a 13-week cash flow forecast so you can stop reacting and start planning",
+                    "Review your pricing formula—you may be undercharging on 50% of jobs",
+                    "Implement real-time job costing to catch cost overruns early",
+                    "Tighten your collections process to reduce days to payment by 20+ days",
+                    "Start reviewing financial reports monthly to spot trends before they become problems"
+                ];
+            } else if (totalScore <= 11) {
+                level = "Fair - On the Right Track";
+                levelClass = "level-fair";
+                interpretation = "You've got the basics down and your business is functional, but you're still leaving profit on the table. Fine-tuning your systems will unlock 10-20% more profitability without adding more revenue.";
+                recommendations = [
+                    "Refine your cash flow forecasting to extend visibility to 13 weeks",
+                    "Audit your pricing to ensure every job type hits your target profit margin",
+                    "Automate job cost tracking to save time and catch issues faster",
+                    "Reduce collection time by 10+ days through payment terms optimization",
+                    "Move to weekly financial reviews to make faster, smarter decisions"
+                ];
+            } else {
+                level = "Excellent - World-Class Financial Management";
+                levelClass = "level-good";
+                interpretation = "You're in the top 5% of contractors when it comes to financial clarity. You know your numbers, manage cash proactively, and make data-driven decisions. Keep refining and you'll continue to outperform your competition.";
+                recommendations = [
+                    "Focus on optimization—squeeze another 5-10% profit through efficiency gains",
+                    "Consider expanding since you have the financial foundation to support growth",
+                    "Mentor other contractors or share your systems as a competitive advantage",
+                    "Explore strategic investments like equipment, technology, or acquisitions",
+                    "Keep innovating—complacency is the enemy of sustained success"
+                ];
+            }
+
+            // Update interpretation section
+            const interpretationDiv = document.getElementById('score-interpretation');
+            interpretationDiv.className = `score-interpretation ${levelClass}`;
+            interpretationDiv.innerHTML = `
+                <h3>${level}</h3>
+                <p>${interpretation}</p>
+            `;
+
+            // Update recommendations section
+            const recommendationsDiv = document.getElementById('recommendations');
+            recommendationsDiv.innerHTML = `
+                <h3>Your Next Steps:</h3>
+                <ul>
+                    ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                </ul>
+            `;
+
+            // Show results
+            document.getElementById('results').classList.add('show');
+            
+            // Smooth scroll to results
+            document.getElementById('results').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        });
+    </script>
+</body>
+</html>
